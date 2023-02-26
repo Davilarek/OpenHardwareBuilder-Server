@@ -22,7 +22,7 @@ Still want to use Github Pages?
 
 You need to generate HTTPS certificate. 
 
-In first three lines of main.js there are settings for HTTPS.
+In first five lines of main.js there are settings for HTTPS.
 
 Change them for your needs.
 
