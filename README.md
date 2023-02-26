@@ -17,5 +17,13 @@ It should look like this:
 
 **Please follow this format**
 
+# Request response meanings
+Server returns wrong data?
+| Message | Context | Meaning                                         |
+|---------|---------|-------------------------------------------------|
+| OK      | /search | Client sent unknown product brand               |
+| NOT OK  | /search | Brand's API returned bad/unknown response       |
+| NOT OK  | /get    | Requested URL returned something other than PDF |
+
 # Warning
 Some brands might ban your ip if you use this tool too often or purposely spam the API, use at your own risk.
