@@ -1,8 +1,6 @@
 const USE_HTTPS = false;
-if (USE_HTTPS) {
-    const key = require("fs").readFileSync('./CA/localhost/localhost.decrypted.key');
-    const cert = require("fs").readFileSync('./CA/localhost/localhost.crt');
-}
+const key = USE_HTTPS ? require("fs").readFileSync('./CA/localhost/localhost.decrypted.key') : undefined;
+const cert = USE_HTTPS ? require("fs").readFileSync('./CA/localhost/localhost.crt') : undefined;
 // change for your needs
 
 const http = USE_HTTPS ? require('https') : require('https');
