@@ -7,7 +7,7 @@ const http = USE_HTTPS ? require('https') : require('https');
 // const pdfParse = require("pdf-parse")
 const { PdfData, VerbosityLevel } = require("pdfdataextract")
 
-const port = 7778;
+const port = process.env.PORT || 7778;
 
 const JUST_PROXY = false;
 
