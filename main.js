@@ -149,8 +149,12 @@ function findASUS_ROGSupportUrl(productName, i, cb) {
     const baseURL = "https://rog.asus.com/recent-data/search-api/v1/suggestion_v1/pl/product/10?SearchKey=" + productName.replaceAll(" ", "-") + "&systemCode=rog";
     try {
         simpleGET(baseURL, (/**@type {Buffer} */data) => {
-            const parsed = JSON.parse(data.toString("utf-8")).Result.Obj[0].Items[i].Url.replaceAll(" ", "%20") + "helpdesk_manual";
-            cb(parsed);
+            try {
+                const parsed = JSON.parse(data.toString("utf-8")).Result.Obj[0].Items[i].Url.replaceAll(" ", "%20") + "helpdesk_manual";
+                cb(parsed);
+            } catch (error) {
+                cb("NOT OK");
+            }
         });
     } catch (error) {
         cb("NOT OK");
@@ -167,8 +171,12 @@ function findASUSSupportUrl(productName, i, cb) {
     const baseURL = "https://odinapi.asus.com/recent-data/apiv2/SearchResult?SystemCode=asus&WebsiteCode=pl&SearchKey=" + productName.replaceAll(" ", "+") + "&SearchType=support&SearchPDLine=&SearchPDLine2=&PDLineFilter=&TopicFilter=&CateFilter=&PageSize=10&Pages=1&LocalFlag=0&siteID=www&sitelang=";
     try {
         simpleGET(baseURL, (/**@type {Buffer} */data) => {
-            const parsed = JSON.parse(data.toString("utf-8")).Result.List[i].ProductManualUrl.replaceAll(" ", "%20").slice(0, -1);
-            cb(parsed);
+            try {
+                const parsed = JSON.parse(data.toString("utf-8")).Result.List[i].ProductManualUrl.replaceAll(" ", "%20").slice(0, -1);
+                cb(parsed);
+            } catch (error) {
+                cb("NOT OK");
+            }
         });
     } catch (error) {
         cb("NOT OK");
