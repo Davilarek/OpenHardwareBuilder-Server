@@ -3,7 +3,7 @@ const key = USE_HTTPS ? require("fs").readFileSync('./CA/localhost/localhost.dec
 const cert = USE_HTTPS ? require("fs").readFileSync('./CA/localhost/localhost.crt') : undefined;
 // change for your needs
 
-const http = USE_HTTPS ? require('https') : require('https');
+const http = USE_HTTPS ? require('https') : require('http');
 // const pdfParse = require("pdf-parse")
 const { PdfData, VerbosityLevel } = require("pdfdataextract")
 
