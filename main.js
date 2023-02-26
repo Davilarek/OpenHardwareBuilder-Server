@@ -109,10 +109,81 @@ const requestHandler = (request, response) => {
             });
         }
     }
+    // TODO: fix this long line, this is quick and dirty solution
+    else if (url.pathname == "/search" && url.searchParams.has("productBrand") && url.searchParams.get("productBrand") != "" && url.searchParams.has("productName") && url.searchParams.get("productName") != "") {
+        const productName = url.searchParams.get("productName");
+        // const baseURL = "https://rog.asus.com/recent-data/search-api/v1/suggestion_v1/pl/product/10?SearchKey=" + productName.replaceAll(" ", "-") + "&systemCode=rog";
+        const productBrand = url.searchParams.get("productBrand");
+        const i = url.searchParams.has("i") && url.searchParams.get("i") != "" ? url.searchParams.get("i") : 0;
+        switch (productBrand) {
+            case "ASUS":
+                findASUSSupportUrl(productName, i, (data) => {
+                    response.setHeader("Content-Type", "text/plain");
+                    response.end(data);
+                });
+                break;
+            case "ASUS_ROG":
+                findASUS_ROGSupportUrl(productName, i, (data) => {
+                    response.setHeader("Content-Type", "text/plain");
+                    response.end(data);
+                });
+                break;
+            default:
+                response.end("OK");
+                break;
+        }
+    }
     else {
         response.end("OK");
     }
 };
+
+/**
+ * rog link: https://rog.asus.com/recent-data/search-api/v1/suggestion_v1/pl/product/10?SearchKey=ROG-STRIX-X670E-E-GAMING-WIFI&systemCode=rog
+ * @param {string} productName
+ */
+function findASUS_ROGSupportUrl(productName, i, cb) {
+    const baseURL = "https://rog.asus.com/recent-data/search-api/v1/suggestion_v1/pl/product/10?SearchKey=" + productName.replaceAll(" ", "-") + "&systemCode=rog";
+    simpleGET(baseURL, (/**@type {Buffer} */data) => {
+        const parsed = JSON.parse(data.toString("utf-8")).Result.Obj[0].Items[i].Url.replaceAll(" ", "%20") + "helpdesk_manual";
+        cb(parsed);
+    });
+    // const parsed = JSON.parse(data.toString("utf-8")).Result.List[i].ProductManualUrl.replaceAll(" ", "%20").slice(0, -1);
+}
+
+/**
+ * ASUS LINK: https://www.asus.com/pl/searchresult?searchType=support&searchKey=<DATA>&page=1
+ * more data: https://odinapi.asus.com/recent-data/apiv2/SearchResult?SystemCode=asus&WebsiteCode=pl&SearchKey=b150+pro+gaming+aura&SearchType=support&SearchPDLine=&SearchPDLine2=&PDLineFilter=&TopicFilter=&CateFilter=&PageSize=10&Pages=1&LocalFlag=0&siteID=www&sitelang=
+ * @param {string} productName
+ */
+function findASUSSupportUrl(productName, i, cb) {
+    const baseURL = "https://odinapi.asus.com/recent-data/apiv2/SearchResult?SystemCode=asus&WebsiteCode=pl&SearchKey=" + productName.replaceAll(" ", "+") + "&SearchType=support&SearchPDLine=&SearchPDLine2=&PDLineFilter=&TopicFilter=&CateFilter=&PageSize=10&Pages=1&LocalFlag=0&siteID=www&sitelang=";
+    simpleGET(baseURL, (/**@type {Buffer} */data) => {
+        const parsed = JSON.parse(data.toString("utf-8")).Result.List[i].ProductManualUrl.replaceAll(" ", "%20").slice(0, -1);
+        cb(parsed);
+    });
+    // return parsed;
+}
+
+function simpleGET(url, cb) {
+    let finalData;
+    let chunks = [];
+    adapterFor(url).get(url, (/**@type {http.IncomingMessage} */res) => {
+        res.on('data', (data) => {
+            chunks.push(data);
+        });
+
+        res.on("end", () => {
+            finalData = Buffer.concat(chunks);
+            cb(finalData);
+        });
+
+        // if there's an error, log it out
+        res.on('error', (e) => {
+            console.log(`Got error: ${e.message}`);
+        });
+    });
+}
 
 /**
  * 
