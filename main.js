@@ -1,4 +1,9 @@
-const http = require('http');
+const USE_HTTPS = false;
+const key = fs.readFileSync('./CA/localhost/localhost.decrypted.key');
+const cert = fs.readFileSync('./CA/localhost/localhost.crt');
+// change for your needs
+
+const http = USE_HTTPS ? require('https') : require('https');
 // const pdfParse = require("pdf-parse")
 const { PdfData, VerbosityLevel } = require("pdfdataextract")
 
@@ -261,7 +266,7 @@ const adapterFor = (function () {
     }
 }());
 
-const server = http.createServer(requestHandler);
+const server = USE_HTTPS ? http.createServer({ key, cert }, requestHandler) : http.createServer(requestHandler);
 
 server.listen(port, (err) => {
     if (err) {
