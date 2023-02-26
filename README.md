@@ -17,6 +17,15 @@ It should look like this:
 
 **Please follow this format**
 
+## HTTPS
+Still want to use Github Pages?
+
+You need to generate HTTPS certificate. 
+
+In first three lines of main.js there are settings for HTTPS.
+
+Change them for your needs.
+
 # Request response meanings
 Server returns wrong data?
 | Message | Context | Meaning                                         |
