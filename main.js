@@ -28,7 +28,8 @@ function isValidHttpUrl(string) {
  * @param {http.ServerResponse} response 
  */
 const requestHandler = (request, response) => {
-    // response.end('Hello Node.js Server!')
+    // response.end('Hello Node.js Server!');
+    console.log("got request");
     const url = new URL(request.url, `http://${request.headers.host}`);
     response.setHeader("Access-Control-Allow-Origin", "*");
     // console.log(url);
