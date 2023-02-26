@@ -133,6 +133,9 @@ const requestHandler = (request, response) => {
                 break;
         }
     }
+    // else if (url.pathname == "/getPDF" && url.searchParams.has("url") && url.searchParams.get("url") != "") {
+
+    // }
     else {
         response.end("OK");
     }
